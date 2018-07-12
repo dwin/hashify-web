@@ -51,7 +51,12 @@
                 <div class="form-group" v-if="dataSource.name == 'text'">
                     <textarea class="form-control" id="plaintext" rows="3" v-model="userInput.plaintext" placeholder="Text to Hash"></textarea>
                 </div>
-                <button type="button" class="btn btn-dark btn-lg btn-block mt-2" v-on:click="submitPlaintext">Get {{ userInput.method }} Digest</button>
+                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" v-on:click="submitPlaintext" v-if="userInput.method">
+                    Get {{ userInput.method }} Digest
+                </button>
+                <button type="button" name="select" class="btn btn-dark btn-lg btn-block mt-2" v-else disabled>
+                    Select Hash Method
+                </button>
                 <div v-for="error in errors" class="mt-4">
                     <div class="alert alert-danger" role="alert" v-show="error.text">
                         {{ error.text }}
@@ -61,9 +66,8 @@
             </form>
         </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-2">
         <div class="col-md-8">
-
                 <div class="card mb-2" v-for="result in results">
                     <div class="card-body">
                         <label>Digest:</label>
@@ -101,7 +105,7 @@
         },
         methods:{
             getHashMethods: function() {
-                axios.get('http://localhost:1313/methods')
+                axios.get('https://api.hashify.net/methods')
                     .then(response => {
                     // JSON responses are automatically parsed.
                     this.hashMethods = response.data
@@ -111,13 +115,15 @@
                     })
             },
             submitPlaintext: function() {
-                axios.post('http://localhost:1313/hash/'+this.userInput.method)
+                axios.post('https://api.hashify.net/hash/'+this.userInput.method)
                     .then(response => {
                     // JSON responses are automatically parsed.
                     //this.result = response.data
                     this.results.unshift({Digest: response.data.Digest,Key: response.data.Key,Type: response.data.Type,Input: this.userInput.plaintext});
                     this.userInput.plaintext = '';
                     this.userInput.method = '';
+                    this.dataSource.name = '';
+                    this.errors = [];
                     })
                     .catch(e => {
                     this.errors.push({text:'Unable to obtain hash digest',level:'danger'})
