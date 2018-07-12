@@ -7,6 +7,7 @@
     <title>hashify</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -95,7 +96,7 @@
                 <!-- Key Input -->
                 <div class="form-group" v-show="userInput.method != '' && requiresKey()">
                     <div class="input-group">
-                        <input type="text" class="form-control" autocomplete="off" v-model="userInput.key" maxlength="256" placeholder="Key" v-bind:class="keyLength">
+                        <input type="text" class="form-control hashVal" autocomplete="off" v-model="userInput.key" maxlength="256" placeholder="Key" v-bind:class="keyLength">
                         <div class="input-group-append">
                                 <div class="input-group-text btn-primary"><a v-on:click="generateKey()"><i class="fas fa-sync-alt"></i></a></div>
                                 <div class="input-group-text btn-danger"><a v-on:click="userInput.key = ''"><i class="fas fa-times-circle"></i></a></div>
@@ -128,13 +129,15 @@
                         <a v-on:click="results.splice(index,1)" style="float: right;">
                             <i class="far fa-times-circle fa-lg" style="color: darkred;"></i>
                         </a>
-                        <label>Digest:</label>
-                        <h5 class="card-title">{{result.Digest}}</h5>
-                        <label>Plaintext:</label>
+                        <h5>Digest:</h5>
+                        </button>
+                        <h5 class="card-title hashVal">{{result.Digest}}</h5>
+                        <h5 class="card-text"></h5>
+                        <h5>Plaintext:</h5>
                         <p class="card-text">{{result.Input}}</p>
                         <label v-if="result.Key">Key:</label>
-                        <p v-if="result.Key">{{result.Key}}</p>
-                        <h4 class="card-text"><span class="badge badge-secondary">{{ result.Type }}</span></h4>
+                        <p v-if="result.Key" class="hashVal">{{result.Key}}</p>
+                        <h4 class="card-text"><span class="badge badge-secondary">{{ result.Type }} <i class="fas fa-ellipsis-v"></i> {{ result.DigestEnc }}</span></h4>
                     </div>
                 </div>
 
@@ -161,7 +164,7 @@
                 level: '',
             }],
             results: [],
-            //result{Digest:'',Key:'',Type:'',}
+            //result{Digest:'',Key:'',Type:'',DigestEnc: ''}
         },
         computed:{
             keyLength: function() {
@@ -192,7 +195,7 @@
                     }}).then(response => {
                     // JSON responses are automatically parsed.
                     //this.result = response.data
-                    this.results.unshift({Digest: response.data.Digest,Key: response.data.Key,Type: response.data.Type,Input: this.userInput.plaintext});
+                    this.results.unshift({Digest: response.data.Digest,DigestEnc: response.data.DigestEnc,Key: response.data.Key,Type: response.data.Type,Input: this.userInput.plaintext});
                     this.userInput.plaintext = '';
                     this.userInput.method = '';
                     this.userInput.dataSource = '';
