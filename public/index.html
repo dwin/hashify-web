@@ -27,6 +27,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="about.html">About</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">API</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -68,8 +71,9 @@
     </div>
     <div class="row justify-content-center mt-2">
         <div class="col-md-8">
-                <div class="card mb-2" v-for="result in results">
+                <div class="card mb-2" v-for="(result,index) in results">
                     <div class="card-body">
+                        <a v-on:click="results.splice(index,1)" style="float: right;"><span class="badge badge-pill badge-dark">X</span></a>
                         <label>Digest:</label>
                         <h5 class="card-title">{{result.Digest}}</h5>
                         <label>Plaintext:</label>
@@ -129,7 +133,7 @@
                     this.errors.push({text:'Unable to obtain hash digest',level:'danger'})
                     })
                     
-            }
+            },
   	    },
         mounted: function() {
             this.getHashMethods();
