@@ -12,10 +12,8 @@
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- 
-
         <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js" integrity="sha256-TaLceMwjWRqe4yhbqPOJH6V7UGt5AvvdNfpaIXJWbFU=" crossorigin="anonymous"></script>
     -->
-
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/dropzone.js"></script>
 </head>
@@ -50,19 +48,6 @@
                     <option v-for="hashMethod in hashMethods">{{ hashMethod.Name }}</option>
                     </select>
                 </div>
-                <!-- Data Source Toggle 
-                <div class="form-group form-inline">
-                    <div class="btn-group btn-group-toggle" >
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.dataSource === 'text' }">
-                            <input type="radio" name="dataSourceOptions" autocomplete="off" value="text" v-model="userInput.dataSource" aria-describedby="dataSourceHelp"> Text Input
-                        </label>
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.dataSource === 'file' }">
-                            <input type="radio" name="dataSourceOptions" autocomplete="off" value="file" v-model="userInput.dataSource" aria-describedby="dataSourceHelp"> File
-                        </label>
-                    </div>
-                    <small id="dataSourceHelp" class="ml-3" style="color:rgb(158, 16, 16);" v-show="userInput.dataSource === ''"><i class="fas fa-caret-left fa-sm"></i> Select a hash input method</small>
-                </div>
-                -->
                 <!-- Data Source Selection -->
                 <div class="form-group">
                     <div class="btn-group btn-group-toggle mr-2" role="group" aria-label="Data Source Toggle">
@@ -98,12 +83,13 @@
                     <div class="input-group">
                         <input type="text" class="form-control hashVal" autocomplete="off" v-model="userInput.key" maxlength="256" placeholder="Key" v-bind:class="keyLength">
                         <div class="input-group-append">
-                                <div class="input-group-text btn-primary"><a v-on:click="generateKey()"><i class="fas fa-sync-alt"></i></a></div>
-                                <div class="input-group-text btn-danger"><a v-on:click="userInput.key = ''"><i class="fas fa-times-circle"></i></a></div>
+                            <div class="input-group-text btn-primary"><a v-on:click="generateKey()"><i class="fas fa-sync-alt"></i></a></div>
+                            <div class="input-group-text btn-danger"><a v-on:click="userInput.key = ''"><i class="fas fa-times-circle"></i></a></div>
                         </div>
                     </div>
                     <small id="keyHelp" class="form-text text-muted">Enter Hash Key or Generate one using controls</small>
                 </div>
+                <!-- Text Input -->
                 <div class="form-group" v-if="userInput.dataSource === 'text'">
                     <textarea class="form-control" id="plaintext" rows="3" v-model="userInput.plaintext" placeholder="Text to Hash"></textarea>
                 </div>
@@ -118,133 +104,31 @@
                         {{ error.text }}
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
     <div class="row justify-content-center mt-2">
         <div class="col-md-8">
-                <div class="card mb-2" v-for="(result,index) in results">
-                    <div class="card-body">
-                        <a v-on:click="results.splice(index,1)" style="float: right;">
-                            <i class="far fa-times-circle fa-lg" style="color: darkred;"></i>
-                        </a>
-                        <h5>Digest:</h5>
-                        </button>
-                        <h5 class="card-title hashVal">{{result.Digest}}</h5>
-                        <h5 class="card-text"></h5>
-                        <h5>Plaintext:</h5>
-                        <p class="card-text">{{result.Input}}</p>
-                        <label v-if="result.Key">Key:</label>
-                        <p v-if="result.Key" class="hashVal">{{result.Key}}</p>
-                        <h4 class="card-text"><span class="badge badge-secondary">{{ result.Type }} <i class="fas fa-ellipsis-v"></i> {{ result.DigestEnc }}</span></h4>
+            <div class="card mb-2" v-for="(result,index) in results">
+                <div class="card-body">
+                    <a v-on:click="results.splice(index,1)" style="float: right;">
+                        <i class="fas fa-trash fa-lg" style="color: darkred;"></i>
+                    </a>
+                    <div class="form-group row">
+                        <label for="digest"><h6>Digest:</h6></label>
+                        <input type="text" class="hashVal form-control-plaintext" v-model="result.Digest" readonly name="digest">
                     </div>
+                    <label v-if="result.Key">Key:</label>
+                    <p v-if="result.Key" class="hashVal">{{result.Key}}</p>
+                    <label><h6>Plaintext:</h6></label>
+                    <textarea class="form-control-plaintext">{{result.Input}}</textarea>
+                    <h5 class="card-text" style="float: right;"><span class="badge badge-secondary">{{ result.Type }} <i class="fas fa-ellipsis-v fa-sm"></i> {{ result.DigestEnc }}</span></h5>
                 </div>
-
+            </div>
         </div>
     </div>
 </div>
-<script>
-    var app = new Vue({
-        el: '.container',
-        data: {
-            userInput: 
-                {
-                    plaintext: '',
-                    method: '',
-                    key: '',
-                    requiredKeyLength:0,
-                    endpoint:'',
-                    dataSource: '',
-                    digestFormat: '',
-                },
-            hashMethods: [],
-            errors:[{
-                text: '',
-                level: '',
-            }],
-            results: [],
-            //result{Digest:'',Key:'',Type:'',DigestEnc: ''}
-        },
-        computed:{
-            keyLength: function() {
-                var len = (new TextEncoder('utf-8').encode(this.userInput.key)).length
-                console.log("bytes: " + len)
-                return  {
-                    'is-valid': len =>  this.userInput.requiredKeyLength,
-                    'is-invalid': len < this.userInput.requiredKeyLength
-                };
-            }
-        },
-        methods:{
-            getHashMethods: function() {
-                axios.get('https://api.hashify.net/methods')
-                    .then(response => {
-                    // JSON responses are automatically parsed.
-                    this.hashMethods = response.data
-                    })
-                    .catch(e => {
-                    this.errors.push({text:'Unable to connect to API server',level:'danger'})
-                    })
-            },
-            submitPlaintext: function() {
-                // Find Endpoint & Send Request
-                axios.post('https://api.hashify.net'+ this.getEndpoint()+'/'+this.userInput.digestFormat, this.userInput.plaintext, { 
-                    headers: {
-                        'X-Hashify-Key': this.userInput.key
-                    }}).then(response => {
-                    // JSON responses are automatically parsed.
-                    //this.result = response.data
-                    this.results.unshift({Digest: response.data.Digest,DigestEnc: response.data.DigestEnc,Key: response.data.Key,Type: response.data.Type,Input: this.userInput.plaintext});
-                    this.userInput.plaintext = '';
-                    this.userInput.method = '';
-                    this.userInput.dataSource = '';
-                    this.errors = [];
-                    })
-                    .catch(e => {
-                    this.errors.push({text:'Unable to obtain hash digest',level:'danger'})
-                    })
-                    
-            },
-            requiresKey: function() {
-                var val = this.userInput.method
-                var idx = this.hashMethods.findIndex(function(item, i){
-                    return item.Name === val
-                });
-                var reqLength = this.hashMethods[idx].MinKeyLength;
-                this.userInput.requiredKeyLength = reqLength;
-                return (reqLength > 0)
-            },
-            getEndpoint: function() {
-                var val = this.userInput.method
-                var idx = this.hashMethods.findIndex(function(item, i){
-                    return item.Name === val
-                });
-                return this.hashMethods[idx].Endpoint
-            },
-            checkRandom: function() {
-                if (! this.randomKey.generate) {
-                    this.userInput.key = 'random'
-                } else {
-                    this.userInput.key = ''
-                }
-            },
-            generateKey: function() {
-                axios.get('https://api.hashify.net/keygen/'+this.userInput.requiredKeyLength)
-                    .then(response => {
-                    // JSON responses are automatically parsed.
-                    this.userInput.key = response.data.KeyHex
-                    })
-                    .catch(e => {
-                    this.errors.push({text:'Unable to connect to API server',level:'danger'})
-                    })
-            },
-  	    },
-        mounted: function() {
-            this.getHashMethods();
-        },
-    })
-</script>
+<script src="js/hashify.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
