@@ -24,11 +24,12 @@ var app = new Vue({
             level: '',
         }],
         results: [],
+        isLoading: false,
         //result{Digest:'',Key:'',Type:'',DigestEnc: ''}
     },
     computed:{
         keyLength: function() {
-            var len = (new TextEncoder('utf-8').encode(this.userInput.key)).length
+            var len = (new TextEncoder('utf-8').encode(this.userInput.key)).length;
             //console.log("bytes: " + len)
             return  {
                 'is-valid': len =>  this.userInput.requiredKeyLength,
@@ -48,6 +49,8 @@ var app = new Vue({
                 });
         },
         submitPlaintext: function() {
+            this.userInput.dataSource = '';
+            
             // Find Endpoint & Send Request
             axios.post(baseURL+ this.getEndpoint()+'/'+this.userInput.digestFormat, this.userInput.plaintext, { 
             headers: {
@@ -57,19 +60,19 @@ var app = new Vue({
             //this.result = response.data
 
             this.results.unshift({Digest: response.data.Digest,DigestEnc: response.data.DigestEnc,Key: response.data.Key,Type: response.data.Type,Input: this.userInput.plaintext});
-
             this.userInput.plaintext = '';
-            this.userInput.method = '';
-            this.userInput.dataSource = '';
             this.userInput.digestFormat = '';
+            this.isLoading = false;
             this.errors = [];
             })
             .catch(e => {
             this.errors.push({text:'Unable to obtain hash digest',level:'danger'});
+            this.isLoading = false;
             });
-                
+
         },
         submitFile: function() {
+            this.userInput.dataSource = '';
             var formData = new FormData();
             var formFile = document.querySelector('#file');
             formData.append("file", formFile.files[0]);
@@ -84,14 +87,16 @@ var app = new Vue({
                 //this.result = response.data
                 this.results.unshift({Digest: response.data.Digest,DigestEnc: response.data.DigestEnc,Key: response.data.Key,Type: response.data.Type,Input: this.userInput.filename});
                 this.userInput.plaintext = '';
-                this.userInput.method = '';
-                this.userInput.dataSource = '';
+                this.userInput.filename = '';
                 this.userInput.digestFormat = '';
+                this.isLoading = false;
                 this.errors = [];
                 })
                 .catch(e => {
                 this.errors.push({text:'Unable to obtain hash digest',level:'danger'});
+                this.isLoading = false;
                 });
+                
         },
         requiresKey: function() {
             var val = this.userInput.method;
@@ -107,6 +112,8 @@ var app = new Vue({
             var idx = this.hashMethods.findIndex(function(item, i){
                 return item.Name === val;
             });
+            this.userInput.method = '';
+            this.isLoading = true;
             return this.hashMethods[idx].Endpoint;
         },
         checkRandom: function() {
