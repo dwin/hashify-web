@@ -5,6 +5,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
     alert('The File APIs are not fully supported in this browser and you may not be able to use File hash feature.');
 }
 var baseURL = 'https://api.hashify.net';
+var maxFileSize = 10000000;
 var app = new Vue({
     el: '.container',
     data: {
@@ -35,9 +36,16 @@ var app = new Vue({
                 'is-valid': len =>  this.userInput.requiredKeyLength,
                 'is-invalid': len < this.userInput.requiredKeyLength
             };
-        }
+        },
+        
     },
     methods:{
+        errorClass: function(lvl) {
+            return {
+                'alert-danger': lvl == 'alert-danger',
+                'alert-warning': lvl == 'alert-warning',
+            };
+        },
         getHashMethods: function() {
             axios.get(baseURL+'/methods')
                 .then(response => {
@@ -75,6 +83,11 @@ var app = new Vue({
             this.userInput.dataSource = '';
             var formData = new FormData();
             var formFile = document.querySelector('#file');
+            // Handle file too large
+            if (formFile.files[0].size > maxFileSize ) {
+                this.fileSizeError()
+                return
+            }
             formData.append("file", formFile.files[0]);
             // Find Endpoint & Send Request
             axios.post(baseURL+ this.getEndpoint()+'/'+this.userInput.digestFormat, formData, {
@@ -126,25 +139,25 @@ var app = new Vue({
         generateKey: function() {
             axios.get(baseURL+'/keygen/'+this.userInput.requiredKeyLength)
                 .then(response => {
-                // JSON responses are automatically parsed.
-                this.userInput.key = response.data.KeyHex
+                    // JSON responses are automatically parsed.
+                    this.userInput.key = response.data.KeyHex
                 })
                 .catch(e => {
-                this.errors.push({text:'Unable to connect to API server',level:'danger'});
+                    this.errors.push({text:'Unable to connect to API server',level:'alert-danger'});
                 });
         },
         addFile: function(e) {
+            if (e.target.files[0].size > maxFileSize ) {
+                this.fileSizeError()
+                return
+            }
             this.userInput.filename = e.target.files[0].name;
-            //var reader = new FileReader();
-            //var fileData = this.userInput.file;
-            /*
-            reader.onload = function(e) {
-                fileData = reader.result;
-                console.log(fileData);
-                app.userInput.plaintext = fileData;
-            };
-            reader.readAsBinaryString(e.target.files[0]);      
-            */
+            
+        },
+        fileSizeError: function(e) {
+            this.errors.push({text:'Web App file size limit is 10MB, use large file via API.',level:'alert-warning'});
+            document.getElementById("file").value = "";
+            return
         },
       },
     mounted: function() {
