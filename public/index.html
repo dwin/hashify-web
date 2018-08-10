@@ -121,10 +121,10 @@
                     <input type="file" id="file" name="file" class="form-control" v-on:change="addFile" >
                 </div>
                 <!-- Submit Button -->
-                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" v-on:click="submitPlaintext" v-if="userInput.method && (userInput.dataSource == 'text') && !isLoading">
+                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" onclick="_paq.push(['trackEvent', 'Generate Hash']);" v-on:click="submitPlaintext" v-if="userInput.method && (userInput.dataSource == 'text') && !isLoading">
                     Get {{ userInput.method }} Digest
                 </button>
-                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" v-on:click="submitFile" v-if="userInput.method && (userInput.dataSource == 'file') && !isLoading">
+                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" onclick="_paq.push(['trackEvent', 'Generate Hash']);" v-on:click="submitFile" v-if="userInput.method && (userInput.dataSource == 'file') && !isLoading" >
                     Get File {{ userInput.method }} Digest
                 </button>
                 <button type="button" name="select" class="btn btn-dark btn-lg btn-block mt-2" v-show="isLoading" disabled>
