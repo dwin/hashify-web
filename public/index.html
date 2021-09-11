@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -7,16 +8,22 @@
     <title>hashify.net</title>
     <meta name="description" content="Hashify is a basic web application and public-accessible hashing API to generate hash digests of whatever you like
     in various output formats">
-    <meta name="keywords" content="hash,sha1,blake2b,blake2s,generate hash,hash generator,sha2,sha256,sha-256,sha hash, blake hash, md5 hash, md4 hash, sha3, sha3 hash">
+    <meta name="keywords"
+        content="hash,sha1,blake2b,blake2s,generate hash,hash generator,sha2,sha256,sha-256,sha hash, blake hash, md5 hash, md4 hash, sha3, sha3 hash">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap_4.1.1.min.css"
+        integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
+    <script defer src="js/font_awesome_v5.1.0_all.js"
+        integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9"
+        crossorigin="anonymous"></script>
     <!-- development version, includes helpful console warnings 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
-    
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js" integrity="sha256-TaLceMwjWRqe4yhbqPOJH6V7UGt5AvvdNfpaIXJWbFU=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="js/vue_2.5.16.min.js" integrity="sha256-TaLceMwjWRqe4yhbqPOJH6V7UGt5AvvdNfpaIXJWbFU="
+        crossorigin="anonymous"></script>
+    <script src="js/axios_0.21.4.min.js"
+        integrity="sha384-YEK3fWV+el8mOLl23uyfnTU92fxC+QY9TX7hjfVjYT2Uw7LiDOLhkMK50KyUqYdR"></script>
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="57x57" href="img/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="img/apple-icon-60x60.png">
@@ -27,7 +34,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="img/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
@@ -37,151 +44,196 @@
     <meta name="theme-color" content="#ffffff">
     <!-- End Favicon -->
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand">hashify</span>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://documenter.getpostman.com/view/3362843/RWMCt9WU">API</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://stats.uptimerobot.com/QnZl8svqB">Status</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <form class="hash-form mt-4">
-                <!-- Hash Selector -->
-                <div class="form-group">
-                    <label for="hashMethodSelector">Hash Method</label>
-                    <select class="form-control mb-3" id="hashMethodSelector" v-model="userInput.method" required>
-                    <option v-for="hashMethod in hashMethods">{{ hashMethod.Name }}</option>
-                    </select>
-                </div>
-                <!-- Data Source Selection -->
-                <div class="form-group">
-                    <div class="btn-group btn-group-toggle mr-2" role="group" aria-label="Data Source Toggle">
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.dataSource === 'text' }">
-                            <input type="radio" name="dataSourceOptions" autocomplete="off" value="text" v-model="userInput.dataSource" aria-describedby="dataSourceHelp"> Text Input
-                        </label>
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.dataSource === 'file' }">
-                            <input type="radio" name="dataSourceOptions" autocomplete="off" value="file" v-model="userInput.dataSource" aria-describedby="dataSourceHelp"> File
-                        </label>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <span class="navbar-brand">hashify</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" rel="noopener"
+                        href="https://documenter.getpostman.com/view/3362843/RWMCt9WU">API</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" rel="noopener"
+                        href="https://stats.uptimerobot.com/QnZl8svqB">Status</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form class="hash-form mt-4">
+                    <!-- Hash Selector -->
+                    <div class="form-group">
+                        <label for="hashMethodSelector">Hash Method</label>
+                        <select class="form-control mb-3" id="hashMethodSelector" v-model="userInput.method" required>
+                            <option v-for="hashMethod in hashMethods">{{ hashMethod.Name }}</option>
+                        </select>
                     </div>
-                    <small id="dataSourceHelp" style="color:rgb(158, 16, 16);" v-show="userInput.dataSource === ''"><i class="fas fa-caret-left fa-sm"></i> Select a hash input method</small>
-                </div>
-                <!-- Digest Output Format Selection --> 
-                <div class="form-group">
-                    <div class="btn-group btn-group-toggle" role="group" aria-label="Digest Format Toggle">
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.digestFormat === 'hex' }">
-                            <input type="radio" name="digestFormatOption" autocomplete="off" value="hex" v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> hex
-                        </label>
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.digestFormat === 'base32' }">
-                            <input type="radio" name="digestFormatOption" autocomplete="off" value="base32" v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> base32
-                        </label>
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.digestFormat === 'base64' }">
-                            <input type="radio" name="digestFormatOption" autocomplete="off" value="base64" v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> base64
-                        </label>
-                        <label class="btn btn-outline-dark" v-bind:class="{ active: userInput.digestFormat === 'base64url' }">
-                            <input type="radio" name="digestFormatOption" autocomplete="off" value="base64url" v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> base64url
-                        </label>
+                    <!-- Data Source Selection -->
+                    <div class="form-group">
+                        <div class="btn-group btn-group-toggle mr-2" role="group" aria-label="Data Source Toggle">
+                            <label class="btn btn-outline-dark"
+                                v-bind:class="{ active: userInput.dataSource === 'text' }">
+                                <input type="radio" name="dataSourceOptions" autocomplete="off" value="text"
+                                    v-model="userInput.dataSource" aria-describedby="dataSourceHelp"> Text Input
+                            </label>
+                            <label class="btn btn-outline-dark"
+                                v-bind:class="{ active: userInput.dataSource === 'file' }">
+                                <input type="radio" name="dataSourceOptions" autocomplete="off" value="file"
+                                    v-model="userInput.dataSource" aria-describedby="dataSourceHelp"> File
+                            </label>
+                        </div>
+                        <small id="dataSourceHelp" style="color:rgb(158, 16, 16);"
+                            v-show="userInput.dataSource === ''"><i class="fas fa-caret-left fa-sm"></i> Select a hash
+                            input method</small>
                     </div>
-                    <small id="digestFormatHelp" style="color:rgb(158, 16, 16);" v-show="userInput.digestFormat === ''"><i class="fas fa-caret-left fa-sm"></i> Select a digest output format</small>
-                </div>            
-                <!-- Key Input -->
-                <div class="form-group" v-show="userInput.method != '' && requiresKey()">
-                    <div class="input-group">
-                        <input type="text" class="form-control hashVal" autocomplete="off" v-model="userInput.key" maxlength="256" placeholder="Key" v-bind:class="keyLength">
-                        <div class="input-group-append">
-                            <div class="input-group-text btn-primary"><a v-on:click="generateKey()"><i class="fas fa-sync-alt"></i></a></div>
-                            <div class="input-group-text btn-danger"><a v-on:click="userInput.key = ''"><i class="fas fa-times-circle"></i></a></div>
+                    <!-- Digest Output Format Selection -->
+                    <div class="form-group">
+                        <div class="btn-group btn-group-toggle" role="group" aria-label="Digest Format Toggle">
+                            <label class="btn btn-outline-dark"
+                                v-bind:class="{ active: userInput.digestFormat === 'hex' }">
+                                <input type="radio" name="digestFormatOption" autocomplete="off" value="hex"
+                                    v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> hex
+                            </label>
+                            <label class="btn btn-outline-dark"
+                                v-bind:class="{ active: userInput.digestFormat === 'base32' }">
+                                <input type="radio" name="digestFormatOption" autocomplete="off" value="base32"
+                                    v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> base32
+                            </label>
+                            <label class="btn btn-outline-dark"
+                                v-bind:class="{ active: userInput.digestFormat === 'base64' }">
+                                <input type="radio" name="digestFormatOption" autocomplete="off" value="base64"
+                                    v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> base64
+                            </label>
+                            <label class="btn btn-outline-dark"
+                                v-bind:class="{ active: userInput.digestFormat === 'base64url' }">
+                                <input type="radio" name="digestFormatOption" autocomplete="off" value="base64url"
+                                    v-model="userInput.digestFormat" aria-describedby="digestFormatHelp"> base64url
+                            </label>
+                        </div>
+                        <small id="digestFormatHelp" style="color:rgb(158, 16, 16);"
+                            v-show="userInput.digestFormat === ''"><i class="fas fa-caret-left fa-sm"></i> Select a
+                            digest output format</small>
+                    </div>
+                    <!-- Key Input -->
+                    <div class="form-group" v-show="userInput.method != '' && requiresKey()">
+                        <div class="input-group">
+                            <input type="text" class="form-control hashVal" autocomplete="off" v-model="userInput.key"
+                                maxlength="256" placeholder="Key" v-bind:class="keyLength">
+                            <div class="input-group-append">
+                                <div class="input-group-text btn-primary"><a v-on:click="generateKey()"><i
+                                            class="fas fa-sync-alt"></i></a></div>
+                                <div class="input-group-text btn-danger"><a v-on:click="userInput.key = ''"><i
+                                            class="fas fa-times-circle"></i></a></div>
+                            </div>
+                        </div>
+                        <small id="keyHelp" class="form-text text-muted">Enter Hash Key or Generate one using
+                            controls</small>
+                    </div>
+                    <!-- Text Input -->
+                    <div class="form-group" v-if="userInput.dataSource === 'text'">
+                        <textarea class="form-control" id="plaintext" rows="3" v-model="userInput.plaintext"
+                            placeholder="Text to Hash"></textarea>
+                    </div>
+                    <!-- File Input -->
+                    <div class="form-group" v-if="userInput.dataSource === 'file'">
+                        <input type="file" id="file" name="file" class="form-control" v-on:change="addFile">
+                    </div>
+                    <!-- Submit Button -->
+                    <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2"
+                        onclick="_paq.push(['trackEvent', 'Generate Hash']);" v-on:click="submitPlaintext"
+                        v-if="userInput.method && (userInput.dataSource == 'text') && !isLoading">
+                        Get {{ userInput.method }} Digest
+                    </button>
+                    <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2"
+                        onclick="_paq.push(['trackEvent', 'Generate Hash']);" v-on:click="submitFile"
+                        v-if="userInput.method && (userInput.dataSource == 'file') && !isLoading">
+                        Get File {{ userInput.method }} Digest
+                    </button>
+                    <button type="button" name="select" class="btn btn-dark btn-lg btn-block mt-2" v-show="isLoading"
+                        disabled>
+                        <i class="fas fa-spinner fa-pulse"></i> Loading
+                    </button>
+                    <button type="button" name="select" class="btn btn-dark btn-lg btn-block mt-2"
+                        v-if="!isLoading && !userInput.method" disabled>
+                        Select Hash Method
+                    </button>
+                    <!-- Errors -->
+                    <div v-for="error in errors" class="mt-4">
+                        <div class="alert" role="alert" v-show="error.text" v-bind:class="error.level">
+                            {{ error.text }}
                         </div>
                     </div>
-                    <small id="keyHelp" class="form-text text-muted">Enter Hash Key or Generate one using controls</small>
-                </div>
-                <!-- Text Input -->
-                <div class="form-group" v-if="userInput.dataSource === 'text'">
-                    <textarea class="form-control" id="plaintext" rows="3" v-model="userInput.plaintext" placeholder="Text to Hash"></textarea>
-                </div>
-                <!-- File Input -->
-                <div class="form-group" v-if="userInput.dataSource === 'file'">
-                    <input type="file" id="file" name="file" class="form-control" v-on:change="addFile" >
-                </div>
-                <!-- Submit Button -->
-                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" onclick="_paq.push(['trackEvent', 'Generate Hash']);" v-on:click="submitPlaintext" v-if="userInput.method && (userInput.dataSource == 'text') && !isLoading">
-                    Get {{ userInput.method }} Digest
-                </button>
-                <button type="button" name="get-digest" class="btn btn-dark btn-lg btn-block mt-2" onclick="_paq.push(['trackEvent', 'Generate Hash']);" v-on:click="submitFile" v-if="userInput.method && (userInput.dataSource == 'file') && !isLoading" >
-                    Get File {{ userInput.method }} Digest
-                </button>
-                <button type="button" name="select" class="btn btn-dark btn-lg btn-block mt-2" v-show="isLoading" disabled>
-                    <i class="fas fa-spinner fa-pulse"></i> Loading
-                </button>
-                <button type="button" name="select" class="btn btn-dark btn-lg btn-block mt-2" v-if="!isLoading && !userInput.method" disabled>
-                    Select Hash Method
-                </button>
-                <!-- Errors -->
-                <div v-for="error in errors" class="mt-4">
-                    <div class="alert" role="alert" v-show="error.text" v-bind:class="error.level" >
-                        {{ error.text }}
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-center mt-2">
-        <div class="col-md-8">
-            <div class="card mb-2" v-for="(result,index) in results">
-                <div class="card-body">
-                    
-                    <div class="form-group">
-                        <label for="digest"><h6>Digest:</h6></label>
-                        <input type="text" class="hashVal form-control-plaintext" v-model="result.Digest" readonly name="digest">
+        <div class="row justify-content-center mt-2">
+            <div class="col-md-8">
+                <div class="card mb-2" v-for="(result,index) in results">
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label for="digest">
+                                <h6>Digest:</h6>
+                            </label>
+                            <input type="text" class="hashVal form-control-plaintext" v-model="result.Digest" readonly
+                                name="digest">
+                        </div>
+                        <div class="form-group">
+                            <label v-if="result.Key">Key:</label>
+                            <p v-if="result.Key" class="hashVal">{{result.Key}}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <h6>Plaintext:</h6>
+                            </label>
+                            <textarea class="form-control-plaintext">{{result.Input}}</textarea>
+                        </div>
+                        <a v-on:click="results.splice(index,1)" style="float: left;">
+                            <i class="fas fa-trash fa-lg" style="color: darkred;"></i>
+                        </a>
+                        <h5 class="card-text" style="float: right;"><span class="badge badge-secondary">{{ result.Type
+                                }} <i class="fas fa-ellipsis-v fa-sm"></i> {{ result.DigestEnc }}</span></h5>
                     </div>
-                    <div class="form-group">
-                        <label v-if="result.Key">Key:</label>
-                        <p v-if="result.Key" class="hashVal">{{result.Key}}</p>
-                    </div>
-                    <div class="form-group">
-                        <label><h6>Plaintext:</h6></label>
-                        <textarea class="form-control-plaintext">{{result.Input}}</textarea>
-                    </div>
-                    <a v-on:click="results.splice(index,1)" style="float: left;">
-                        <i class="fas fa-trash fa-lg" style="color: darkred;"></i>
-                    </a>
-                    <h5 class="card-text" style="float: right;"><span class="badge badge-secondary">{{ result.Type }} <i class="fas fa-ellipsis-v fa-sm"></i> {{ result.DigestEnc }}</span></h5>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="js/hashify.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<!-- Outdated Browser notice -->
-<script> 
-    var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,unsupported:true,api:2018.07 }; 
-    function $buo_f(){ 
-        var e = document.createElement("script"); 
-        e.src = "//browser-update.org/update.min.js"; 
-        document.body.appendChild(e);
-    };
-    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
-    catch(e){window.attachEvent("onload", $buo_f)}
-</script>
+    <script src="js/hashify.js"
+        integrity="sha384-60KsmNkrc0kNymUb/8iAPxl7OrBCPrJ/BdVelkBN8VHkMePo5Ek1S6eWrPwP/LOv"></script>
+    <script src="js/jquery-3.2.1.slim.min.js.css"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="js/popper_1.12.9.min.js.css"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="js/bootstrap_4.0.0.min.js.css"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- Outdated Browser notice -->
+    <script>
+        var $buoop = { required: { e: -4, f: -3, o: -3, s: -1, c: -3 }, insecure: true, unsupported: true, api: 2018.07 };
+        function $buo_f() {
+            var e = document.createElement("script");
+            e.src = "//browser-update.org/update.min.js";
+            document.body.appendChild(e);
+        };
+        try { document.addEventListener("DOMContentLoaded", $buo_f, false) }
+        catch (e) { window.attachEvent("onload", $buo_f) }
+    </script>
 </body>
+
 </html>
