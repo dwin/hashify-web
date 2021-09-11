@@ -58,13 +58,19 @@
                     <h5 class="card-title">About hashify</h5>
                     <p class="card-text">Hashify is a basic web application and public-accessible hashing API to generate hash digests of whatever you like
                         in various output formats.</p>
+                    <!--sse-->
                     <p class="card-text">If you encounter a problem, please create an issue on <a href="https://github.com/dwin/hashify" target="_blank">Github</a>.</p>
-                    <p class="card-text">Hashify does not log hash inputs or digests, but IPs are temporarily cached, but not written to disk, for abuse prevention.</p>
+                    <!--/sse-->
+                    <p class="card-text">Hashify does not log hash digests, but does log inputs when using url querystring params in access logs. IPs are logged for abuse prevention with less than 30 days retention.</p>
+                    <!--sse-->
                     <a href="https://github.com/dwin/hashify" target="_blank" class="card-link"><i class="fab fa-github" style="color: black"></i> Github</a>
+                    <!--/sse-->
                 </div>
                 <ul class="list-group list-group-flush" class="text-muted">
                     <li class="list-group-item">
-                            <h6 class="card-subtitle mb-2 text-muted">Made with <i class="fas fa-heart" style="color: rgb(139, 0, 0)"></i> by <a class="badge badge-secondary" href="https://dlsmi.com" target="_blank">Darwin Smith II</a> using:</h6>
+                        <!--sse-->
+                        <h6 class="card-subtitle mb-2 text-muted">Made with <i class="fas fa-heart" style="color: rgb(139, 0, 0)"></i> by <a class="badge badge-secondary" href="https://dlsmi.com" target="_blank">Darwin Smith II</a> using:</h6>
+                        <!--/sse-->
                         <a href="https://vuejs.org" target="_blank"><i class="fab fa-vuejs fa-2x" style="color: teal;"></i></a>
                         <a href="https://golang.org"><img src="img/Go-Logo_Blue.svg" alt="Golang Logo" style="height: 4em; padding-bottom: 0.75em;"></a>
                     </li>
