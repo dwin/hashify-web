@@ -1,11 +1,12 @@
 @font-face {
-    font-family: 'anonymous_proregular';
-    src: url('anonymous_pro-webfont.woff2') format('woff2'),
-         url('anonymous_pro-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
+  font-family: "anonymous_proregular";
+  src: local("Pacifico Regular"),
+    url("anonymous_pro-webfont.woff2") format("woff2"),
+    url("anonymous_pro-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 .hashVal {
-    font-family: 'anonymous_proregular','serif';
+  font-family: "anonymous_proregular", "serif";
 }
