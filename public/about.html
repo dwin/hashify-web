@@ -1,77 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>hashify</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js" integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9" crossorigin="anonymous"></script>
+    <link
+      rel="stylesheet"
+      href="css/bootstrap_4.1.1.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="js/font_awesome_v5.1.0_all.js"
+      integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      data-goatcounter="https://hashify.goatcounter.com/count"
+      async
+      src="js/gc_count.v2.js"
+      crossorigin="anonymous"
+      integrity="sha384-PeYXrhTyEaBBz91ANMgpSbfN1kjioQNPHNDbMvevUVLJoWrVEjDCpKb71TehNAlj"
+    ></script>
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="57x57" href="img/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="img/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="img/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="img/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="img/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="img/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="img/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="img/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-    <link rel="manifest" href="file/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="img/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="img/apple-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="img/apple-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="img/apple-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="img/apple-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="img/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="img/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="img/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="img/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="img/android-icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="img/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/favicon-16x16.png"
+    />
+    <link rel="manifest" href="file/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="img/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
     <!-- End Favicon -->
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand">hashify</span>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <span class="navbar-brand">hashify</span>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="about.html">About <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://documenter.getpostman.com/view/3362843/RWMCt9WU">API</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" target="_blank" href="https://stats.uptimerobot.com/QnZl8svqB">Status</a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="about.html"
+              >About <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              target="_blank"
+              rel="noopener"
+              href="https://documenter.getpostman.com/view/3362843/RWMCt9WU"
+              >API</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              target="_blank"
+              rel="noopener"
+              href="https://stats.uptimerobot.com/QnZl8svqB"
+              >Status</a
+            >
+          </li>
         </ul>
-    </div>
-</nav>
-<div class="container">
-    <div class="row justify-content-center mt-4">
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row justify-content-center mt-4">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">About hashify</h5>
-                    <p class="card-text">Hashify is a basic web application and public-accessible hashing API to generate hash digests of whatever you like
-                        in various output formats.</p>
-                    <p class="card-text">If you encounter a problem, please create an issue on <a href="https://github.com/dwin/hashify" target="_blank">Github</a>.</p>
-                    <p class="card-text">Hashify does not log hash inputs or digests, but IPs are temporarily cached, but not written to disk, for abuse prevention.</p>
-                    <a href="https://github.com/dwin/hashify" target="_blank" class="card-link"><i class="fab fa-github" style="color: black"></i> Github</a>
-                </div>
-                <ul class="list-group list-group-flush" class="text-muted">
-                    <li class="list-group-item">
-                            <h6 class="card-subtitle mb-2 text-muted">Made with <i class="fas fa-heart" style="color: rgb(139, 0, 0)"></i> by <a class="badge badge-secondary" href="https://dlsmi.com" target="_blank">Darwin Smith II</a> using:</h6>
-                        <a href="https://vuejs.org" target="_blank"><i class="fab fa-vuejs fa-2x" style="color: teal;"></i></a>
-                        <a href="https://golang.org"><img src="img/Go-Logo_Blue.svg" alt="Golang Logo" style="height: 4em; padding-bottom: 0.75em;"></a>
-                    </li>
-                </ul>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">About hashify</h5>
+              <p class="card-text">
+                Hashify is a basic web application and public-accessible hashing
+                API to generate hash digests of whatever you like in various
+                output formats.
+              </p>
+              <!--sse-->
+              <p class="card-text">
+                If you encounter a problem, please create an issue on
+                <a href="https://github.com/dwin/hashify">Github</a>.
+              </p>
+              <!--/sse-->
+              <p class="card-text">
+                Hashify does not log hash digests, but does log inputs when
+                using url querystring params in access logs. IPs are logged for
+                abuse prevention with less than 30 days retention.
+              </p>
+              <!--sse-->
+              <a href="https://github.com/dwin/hashify" class="card-link"
+                ><i class="fab fa-github" style="color: black"></i> Github</a
+              >
+              <!--/sse-->
             </div>
+            <ul class="list-group list-group-flush" class="text-muted">
+              <li class="list-group-item">
+                <!--sse-->
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Made with
+                  <i class="fas fa-heart" style="color: rgb(139, 0, 0)"></i> by
+                  <a class="badge badge-secondary" href="https://dlsmi.com"
+                    >Darwin Smith II</a
+                  >
+                  using:
+                </h6>
+                <!--/sse-->
+                <a href="https://vuejs.org"
+                  ><i class="fab fa-vuejs fa-2x" style="color: teal"></i
+                ></a>
+                <a href="https://golang.org"
+                  ><img
+                    src="img/Go-Logo_Blue.svg"
+                    alt="Golang Logo"
+                    style="height: 4em; padding-bottom: 0.75em"
+                /></a>
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</body>
+    <!-- Cloudflare Web Analytics -->
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "58c06185a7264f65bb3dd7e113c1141b"}'
+    ></script>
+    <!-- End Cloudflare Web Analytics -->
+  </body>
 </html>
